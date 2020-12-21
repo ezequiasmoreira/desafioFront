@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR"  ng-app="desafioTecnico">
+    <meta charset="utf-8"/>
+    <head>
+        <title>Cadastrato de cliente</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="../../css/app.css">
+        <link rel="stylesheet" type="text/css" href="cliente.css">
+        <script src="../../lib/angular.js"></script>
+        <script src="../../lib/angular-route.js"></script>
+        <script src="../../js/app.js"></script>
+        <script src="../../js/config/configUrl.js"></script>
+        <script src="../../js/controllers/clienteCtrl.js"></script>
+        <script src="../../js/controllers/desafioTecnicoCtrl.js"></script>
+        <script src="../../services/clienteFactoryService.js"></script>       
+    </head>   
+    <body >
+    <div class="container" ng-controller ="clienteCtrl">    
+        <form >
+            <div class="form-group col-sm-12" >
+                <button type="button" ng-click="salvarCliente(cliente,enderecos)" class="btn btn-primary">Salvar</button>
+                <button type="button" ng-click="excluirCliente(cliente)" class="btn btn-danger">Excluir</button>
+            </div>            
+            <div ng-show="mensagemDeErro.length"  class="form-group col-sm-10 alert alert-danger ">
+                {{mensagemDeErro}}
+            </div>
+            <div class="form-group col-sm-4">
+                <input type="hidden" ng-model="cliente.id" id="id">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" ng-model="cliente.nome" id="nome"  placeholder="nome">
+            </div>
+            <div class="form-group col-sm-4 cpf-group" >
+                <label for="cpf">cpf</label>
+                <input type="text" class="form-control numero" ng-model="cliente.cpf" id="cpf" placeholder="cpf">
+            </div>
+            <div class="form-group col-sm-12" >
+                <div class="form-group col-sm-4" >
+                    <label for="numero" class="col-sm-12">Telefone</label>
+                    <input type="hidden" ng-model="telefone.id"id="telefoneId">
+                    <input type="number" class="form-control width-15 float-left" ng-model="telefone.dd" id="dd"  placeholder="dd">
+                    <input type="number" class="form-control width-15 float-left" ng-model="telefone.ddd" id="ddd" placeholder="ddd">
+                    <input type="number" class="form-control numero float-left" ng-model="telefone.telefone" id="telefone" placeholder="d dddd-dddd">
+                    <span class="glyphicon glyphicon-plus float-left cursor" ng-click="adicionarTelefone(telefone,cliente)"></span>
+                    <table class="table ">                      
+                        <tr>
+                            <td ng-hide="1">id</td>
+                            <th>Telefones</th>
+                            <th class="width-15"></th>
+                        </tr>
+                        <tr ng-repeat="telefone in telefones">
+                            <td ng-hide="1">{{telefone.id}}</td>
+                            <td>({{telefone.dd}}) ({{telefone.ddd}}) {{telefone.telefone}}</td>
+                            <td><span class="glyphicon glyphicon-trash cursor" ng-click="excluirTelefone(telefone,cliente)"></td>                            
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-group col-sm-6 endereco-group" >
+                    <label for="dd" class="col-sm-12">Endereço</label>
+                    <input type="hidden" ng-model="endereco.id" id="enderecoId">
+                    <input type="text" class="form-control width-15 float-left" ng-model="endereco.cep" id="cep" placeholder="cep">
+                    <input type="text" class="form-control width-15 float-left" ng-model="endereco.numero" id="numero" placeholder="número">
+                    <input type="text" class="form-control numero float-left" ng-model="endereco.logradouro" id="logradouro" placeholder="logradouro">
+                    <span class="glyphicon glyphicon-plus float-left cursor" ng-click="adicionarEndereco(endereco,cliente)"></span>
+                    <table class="table ">                      
+                        <tr>
+                            <th ng-hide="1">id</th>
+                            <th class="col-sm-3">Endereços</th>
+                            <th class="col-sm-2"></th>
+                            <th class="col-sm-7"></th>
+                            <th ><span class="glyphicon glyphicon-home"></span></th>
+                            <th class="width-5"><span class="glyphicon glyphicon-trash cursor" ng-click="excluirEnderecos(enderecos,cliente)"></span></th>
+                        </tr>
+                        <input ng-hide="1" type="radio" name="endereco-principal" >
+                        <tr ng-repeat="endereco in enderecos">
+                            <td ng-hide="1">{{endereco.id}}</td>
+                            <td class="col-sm-3">Cep: {{endereco.cep}}</td>
+                            <td class="col-sm-2">N°: {{endereco.numero}}</td>
+                            <td class="col-sm-7">End: {{endereco.logradouro}}</td>
+                            <td ><input type="radio" ng-click="alterarValorDoRadio()" class="radio" ng-model="endereco.principal" value="principal" name="endereco-principal" ></td>
+                            <td><input type="checkbox" ng-model="endereco.excluirCheckado"></td>
+                        </tr>
+                </table>
+                </div>
+            </div>
+            <table class="table ">                      
+                    <tr>
+                        <th class="col-sm-6">Cliente</th>
+                        <th class="width-15 col-sm-2">Cpf</th>
+                        <th class="width-15 col-sm-3">Endereço</th>
+                        <th class="col-sm-1"> Editar</span></th>
+                    </tr>
+                    <tr ng-repeat="cliente in clientes">
+                        <td>{{cliente.nome}}</td>
+                        <td>{{cliente.cpf}}</td>
+                        <td>{{cliente.endereco.logradouro}}, {{cliente.endereco.numero}}</td>
+                        <td > <span ng-click="editar(cliente)" class="glyphicon glyphicon-pencil cursor"></span></td>                           
+                    </tr>
+                </table>           
+        </form>   
+        
+    </div>
+</body>
+</html>
+

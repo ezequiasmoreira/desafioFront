@@ -1,0 +1,15 @@
+.container {
+    margin-top: 50px;
+}
+.float-left{
+    float: left;
+}
+.width-15{
+    width: 15%;
+}
+.width-5{
+    width: 5%;
+}
+.cursor{
+    cursor:pointer;
+}

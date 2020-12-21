@@ -1,0 +1,15 @@
+.numero {
+    width: 65%; 
+}
+.glyphicon-plus{
+    margin-top:8px; margin-left:4px; 
+}
+#nome{
+    width: 95%;
+}
+.form-group{
+    padding:0;
+}
+.endereco-group, .cpf-group {
+    margin-left:15px;
+}
